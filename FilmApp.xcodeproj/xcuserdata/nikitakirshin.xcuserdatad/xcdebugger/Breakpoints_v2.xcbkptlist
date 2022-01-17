@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "503CDB30-D942-412D-B1E1-7BE734A06A84"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7DD8AE86-02B4-492A-B1DE-C273C38F7F5A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Model/FilmCollectionViewCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "14"
+            endingLineNumber = "14"
+            landmarkName = "posterPreviewImageView"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "7DD8AE86-02B4-492A-B1DE-C273C38F7F5A - 81565889e6ff59ff"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; __C.UIImageView in variable initialization expression of FilmApp.FilmCollectionViewCell.posterPreviewImageView : __C.UIImageView"
+                  moduleName = "FilmApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nikitakirshin/Documents/SkillFactoryProjects/FilmApp/FilmApp/Model/FilmCollectionViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  uuid = "7DD8AE86-02B4-492A-B1DE-C273C38F7F5A - bab0eb96c15fce98"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FilmApp.FilmCollectionViewCell.init(frame: __C.CGRect) -&gt; FilmApp.FilmCollectionViewCell"
+                  moduleName = "FilmApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nikitakirshin/Documents/SkillFactoryProjects/FilmApp/FilmApp/Model/FilmCollectionViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "112">
+               </Location>
+               <Location
+                  uuid = "7DD8AE86-02B4-492A-B1DE-C273C38F7F5A - 1394ae4b0355b69a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FilmApp.FilmCollectionViewCell.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;FilmApp.FilmCollectionViewCell&gt;"
+                  moduleName = "FilmApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nikitakirshin/Documents/SkillFactoryProjects/FilmApp/FilmApp/Model/FilmCollectionViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "92">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
