@@ -29,10 +29,8 @@ class Item {
 
 class Model {
     
-    
-    
-    var newTestArray = [Item]()
     var likedFilmsArray = [Item]()
+    var newTestArray = [Item]()
     
     // Тестовый array до добавления в проект сетевого взаимодействия
     public var testArray: [Item] = [
@@ -52,4 +50,38 @@ class Model {
         Item(id: 13, testPic: "image14", testTitle: "Фильм 14", testYear: 2001, testRating: 8.5, isLiked: false),
         Item(id: 14, testPic: "image15", testTitle: "Фильм 15", testYear: 2004, testRating: 7.7, isLiked: true)
     ]
+    
+    func showLikedFilms() {
+        likedFilmsArray = []
+        for i in testArray {
+            if i.isLiked == true {
+                likedFilmsArray.append(i)
+            }
+        }
+    }
+    
+    func addToFav() {
+        
+    }
+    
+    func search(searchTextValue: String) {
+        newTestArray = []
+        
+        if searchTextValue == "" {
+            newTestArray = testArray
+        } else {
+            for item in testArray {
+                guard let unwrItem = item.testTitle else {return}
+                
+                if unwrItem.contains(searchTextValue){
+                    newTestArray.append(item)
+                }
+            }
+        }
+        newTestArray = testArray.filter({$0.testTitle?.range(of: searchTextValue, options: .caseInsensitive) != nil
+            
+        })
+    }
+    
 }
+

@@ -1,15 +1,15 @@
 //
-//  FilmCollectionViewCell.swift
+//  FavoriteFilmCollectionViewCell.swift
 //  FilmApp
 //
-//  Created by Nikita Kirshin on 11.01.2022.
+//  Created by Nikita Kirshin on 19.01.2022.
 //
 
 import UIKit
 
-class FilmCollectionViewCell: UICollectionViewCell {
+class FavoriteFilmCollectionViewCell: UICollectionViewCell {
     
-    static let identifier = "FilmCell"
+    static let identifier = "FavFilmCell"
     
     var posterPreviewImageView: UIImageView = {
         let imageView = UIImageView()
@@ -42,6 +42,13 @@ class FilmCollectionViewCell: UICollectionViewCell {
         return label
     } ()
     
+    var deleteFromFav: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "xmark.bin.circle"), for: .normal)
+        button.imageView?.tintColor = .red
+        return button
+    } ()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .white
@@ -49,6 +56,7 @@ class FilmCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(filmTitleLabel)
         contentView.addSubview(releaseYearLabel)
         contentView.addSubview(ratingLabel)
+        contentView.addSubview(deleteFromFav)
     }
     
     required init?(coder: NSCoder) {
@@ -68,15 +76,19 @@ class FilmCollectionViewCell: UICollectionViewCell {
                                       height: 30)
         releaseYearLabel.frame = CGRect(x: 15,
                                       y: contentView.frame.size.height-45,
-                                      width: contentView.frame.size.width/2,
+                                      width: contentView.frame.size.width-10,
                                       height: 20)
         ratingLabel.frame = CGRect(x: 15,
                                       y: contentView.frame.size.height-25,
-                                      width: contentView.frame.size.width/2,
+                                      width: contentView.frame.size.width-10,
                                       height: 20)
+        deleteFromFav.frame = CGRect(x: contentView.frame.size.width/1.2,
+                                     y: contentView.frame.size.height-45,
+                                     width: 20,
+                                     height: 20)
         
     }
-    
+
     var data: Item? {
         didSet {
             guard data != nil else {
@@ -88,13 +100,6 @@ class FilmCollectionViewCell: UICollectionViewCell {
             ratingLabel.text = String(data?.testRating ?? 0)
         }
     }
-    
 }
 
 
-
-//filmTitleLabel: UILabel!
-//
-//@IBOutlet weak var releaseYearLabel: UILabel!
-//
-//@IBOutlet weak var ratingLabel: UILabel!

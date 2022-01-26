@@ -9,21 +9,34 @@ import UIKit
 
 class PosterFullViewController: UIViewController {
 
+    let fullPosterImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "image2")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+
+    var detailIndexPath: Int = Int()
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        view.addSubview(fullPosterImageView)
+        adjustConstraintsPoster()
+        fullPosterImageView.image = UIImage(named: Model().testArray[detailIndexPath].testPic ?? "image1")
+ 
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func adjustConstraintsPoster() {
+        
+        let constraints: [NSLayoutConstraint] = [
+            fullPosterImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            fullPosterImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            fullPosterImageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            fullPosterImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)]
+        
+        NSLayoutConstraint.activate(constraints)
     }
-    */
-
 }
