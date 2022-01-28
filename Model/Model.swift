@@ -59,10 +59,18 @@ class Model {
             }
         }
     }
-    
-    func addToFav() {
         
+    var sortAscending: Bool = true
+    
+    func ratingSort(){
+        // 1.замыкание для сортировки
+        self.testArray.sort {
+            sortAscending ? ($0.testRating ?? 0) < ($1.testRating ?? 0) : ($0.testRating ?? 0) > ($1.testRating ?? 0)
+        }
+        // 2. присваивание значения
+        newTestArray = testArray
     }
+    
     
     func search(searchTextValue: String) {
         newTestArray = []

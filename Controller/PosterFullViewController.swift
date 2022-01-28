@@ -8,6 +8,8 @@
 import UIKit
 
 class PosterFullViewController: UIViewController {
+    
+    let receivedIndex: Int = Int()
 
     let fullPosterImageView: UIImageView = {
         let imageView = UIImageView()

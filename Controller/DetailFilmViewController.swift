@@ -13,6 +13,7 @@ class DetailFilmViewController: UIViewController {
     
     let model = Model()
     let transition: RoundingTransition = RoundingTransition()
+    private var galleryCollectionView: UICollectionView?
     
     //Получаемый id из FavoriteFilmsCollectionView
     var receivedIndex: Int = Int()
@@ -42,6 +43,7 @@ class DetailFilmViewController: UIViewController {
         label.text = "Кадры, съемки"
         return label
     } ()
+    
     var posterImageView: UIImageView = {
         let imageView = UIImageView()
         
@@ -86,13 +88,6 @@ class DetailFilmViewController: UIViewController {
         return label
     } ()
     
-    func likeButtonAction(_ sender: UIButton) {
-        
-    }
-    
-//    private var galleryCollectionView = UICollectionView()
-
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,7 +97,6 @@ class DetailFilmViewController: UIViewController {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 1
         layout.minimumInteritemSpacing = 1
         
         view.addSubview(posterImageView)
@@ -123,16 +117,28 @@ class DetailFilmViewController: UIViewController {
         adjustConstraintsAddToFavBtn()
         
         
-//        // Добавление Horizontal Collection View
-//        galleryCollectionView = UICollectionView(frame: .zero,
-//                                          collectionViewLayout: layout)
-//        galleryCollectionView.register(FilmPicsCollectionViewCell.self,
-//                                forCellWithReuseIdentifier: FilmPicsCollectionViewCell.identifier)
-//        galleryCollectionView.dataSource = self
-//        galleryCollectionView.delegate = self
-//        view.addSubview(galleryCollectionView)
+//MARK: - Collection View
+        galleryCollectionView = UICollectionView(frame: .zero,
+                                          collectionViewLayout: layout)
+        guard let galleryCollectionView = galleryCollectionView else {return}
+        galleryCollectionView.register(FilmPicsCollectionViewCell.self, forCellWithReuseIdentifier: FilmPicsCollectionViewCell.identifier)
+        galleryCollectionView.dataSource = self
+        galleryCollectionView.delegate = self
+        galleryCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        // Наполнение лейблов и изображений
+        view.addSubview(galleryCollectionView)
+        
+        let collectionViewConstraints = [
+            galleryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 10),
+            galleryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -10),
+            galleryCollectionView.heightAnchor.constraint(equalToConstant: 80),
+            galleryCollectionView.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: 16)
+        ]
+        
+        NSLayoutConstraint.activate(collectionViewConstraints)
+        
+        
+//MARK: - Наполнение лейблов и изображений
         if cameFromFav {
             
             model.showLikedFilms()
@@ -154,11 +160,6 @@ class DetailFilmViewController: UIViewController {
                 addToFavBtn.tintColor = .gray
             }
         } else {
-//            navigationItem.title = Model().testArray[receivedIndex].testTitle ?? "TEST"
-//            posterImageView.image = UIImage(named: Model().testArray[receivedIndex].testPic ?? "image1")
-//            ratingLabel.text = String(Model().testArray[receivedIndex].testRating ?? 0.0)
-//            releaseYearLabel.text = String(Model().testArray[receivedIndex].testYear ?? 0000)
-
             let element = model.testArray[receivedIndex]
             navigationItem.title = element.testTitle ?? "TEST"
             posterImageView.image = UIImage(named: element.testPic ?? "image1")
@@ -176,6 +177,7 @@ class DetailFilmViewController: UIViewController {
         
     }
     
+//MARK: - Constraints
     
     func adjustConstraintsImage() {
         
@@ -257,13 +259,13 @@ class DetailFilmViewController: UIViewController {
                                                             constant: 10),
             staticDescriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                                                              constant: -10),
-            staticDescriptionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                                                           constant: -view.frame.height/2.7),
-            staticDescriptionLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor)]
+            staticDescriptionLabel.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor),
+            staticDescriptionLabel.topAnchor.constraint(equalTo: galleryCollectionView?.bottomAnchor ?? view.safeAreaLayoutGuide.bottomAnchor,
+                                                        constant: -view.frame.height/3.5)]
 
         NSLayoutConstraint.activate(constraints)
     }
-    
+//
     func adjustConstraintsDescription() {
 
         let constraints: [NSLayoutConstraint] = [
@@ -272,45 +274,48 @@ class DetailFilmViewController: UIViewController {
             descriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                                                        constant: -10),
             descriptionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            descriptionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                                                  constant: -view.frame.height/2.5)]
+            descriptionLabel.topAnchor.constraint(equalTo: staticDescriptionLabel.bottomAnchor)]
 
         NSLayoutConstraint.activate(constraints)
     }
-    
-//    func adjustConstraintsGalleryCollectionView() {
-//
-//        let constraints: [NSLayoutConstraint] = [
-//            descriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-//                                                      constant: 10),
-//            descriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-//                                                       constant: -10),
-//            descriptionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-//            descriptionLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor)]
-//
-//        NSLayoutConstraint.activate(constraints)
-//    }
-    
-    
+  
 }
 
-//extension DetailFilmViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 1
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//
-//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilmPicsCollectionViewCell.identifier,
-//                                                            for: indexPath) as? FilmPicsCollectionViewCell else {
-//            return UICollectionViewCell()
-//        }
-////        cell.data = self.model.likedFilmsArray[indexPath.item]
-//        return cell
-//    }
-//
-//
-//}
+//MARK: - EXTENSIONS
+
+extension DetailFilmViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 15
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilmPicsCollectionViewCell.identifier,
+                                                            for: indexPath) as? FilmPicsCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        cell.posterPreviewImageView.image = UIImage(named: model.testArray[indexPath.item].testPic ?? "image1")
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return CGSize(width: 80,
+                      height: 80)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let destVC = FullPicsViewController()
+        destVC.receivedIndex = model.testArray[indexPath.row].id ?? 0
+//        navigationController?.pushViewController(destVC, animated: true)
+        self.present(destVC, animated: true, completion: nil)
+    }
+
+
+}
     
     
 //    MARK: -- Animation

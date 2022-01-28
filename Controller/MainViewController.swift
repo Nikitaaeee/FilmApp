@@ -15,8 +15,12 @@ class MainViewController: UIViewController, UISearchBarDelegate {
     
     let model = Model()
     
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        model.newTestArray = model.testArray
         
 //        print(model.testArray)
         print(model.likedFilmsArray)
@@ -31,10 +35,15 @@ class MainViewController: UIViewController, UISearchBarDelegate {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "heart.fill"),
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "heart.fill"),
                                                             style: .plain,
                                                             target: self,
                                                             action: #selector(goToFav))
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.up"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(sortRating))
                 
         // Layout
         let layout = UICollectionViewFlowLayout()
@@ -56,6 +65,9 @@ class MainViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(collectionView)
         collectionView.frame = view.bounds
 //        print(collectionView.bounds.height)
+        model.ratingSort()
+   
+        collectionView.reloadData()
         
         
     }
@@ -66,17 +78,24 @@ class MainViewController: UIViewController, UISearchBarDelegate {
     }
     
     
+    @objc func sortRating() {
+        let arrowUp = UIImage(systemName: "arrow.up")
+        let arrowDown = UIImage(systemName: "arrow.down")
+        model.sortAscending = !model.sortAscending
+        navigationItem.rightBarButtonItem?.image = model.sortAscending ? arrowUp : arrowDown
+        model.ratingSort()
+        collectionView!.reloadData()
+    }
+    
+    
         // Методы Search Bar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         model.search(searchTextValue: searchText)
-        collectionView!.reloadData()
-        print("aaa")
-
+        collectionView?.reloadData()
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         model.newTestArray = model.testArray
         collectionView?.reloadData()
-        print("ooo")
     }
 }
 
@@ -85,7 +104,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         
-        return model.testArray.count
+        return model.newTestArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -95,7 +114,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
                                                             for: indexPath) as? FilmCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.data = self.model.testArray[indexPath.item]
+        cell.data = self.model.newTestArray[indexPath.item]
         return cell
     }
     
@@ -115,11 +134,9 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
                         didSelectItemAt indexPath: IndexPath) {
         
         let destVC = DetailFilmViewController()
-        destVC.receivedIndex = model.testArray[indexPath.row].id ?? 0
+        destVC.receivedIndex = model.newTestArray[indexPath.row].id ?? 0
         destVC.cameFromFav = false
         navigationController?.pushViewController(destVC, animated: true)
-        
     }
-    
 }
 
