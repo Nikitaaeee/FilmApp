@@ -75,6 +75,7 @@ class DetailFilmViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "heart"), for: .normal)
+        button.addTarget(self, action: #selector(addToFavBtnPressed), for: .touchUpInside)
 //        button.imageView?.tintColor = .red
         return button
     } ()
@@ -87,6 +88,17 @@ class DetailFilmViewController: UIViewController {
 //        label.backgroundColor = .green
         return label
     } ()
+    
+    @objc func addToFavBtnPressed(_ sender: UIButton) {
+        model.updateLike(at: receivedIndex)
+        if addToFavBtn.alpha == 1 {
+            addToFavBtn.alpha =  0.45
+            addToFavBtn.tintColor = .gray
+        } else {
+            addToFavBtn.alpha = 1
+            addToFavBtn.tintColor = .black
+        }
+    }
     
 
     override func viewDidLoad() {
@@ -132,7 +144,7 @@ class DetailFilmViewController: UIViewController {
             galleryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 10),
             galleryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor,constant: -10),
             galleryCollectionView.heightAnchor.constraint(equalToConstant: 80),
-            galleryCollectionView.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: 16)
+            galleryCollectionView.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: 5)
         ]
         
         NSLayoutConstraint.activate(collectionViewConstraints)
@@ -144,15 +156,15 @@ class DetailFilmViewController: UIViewController {
             model.showLikedFilms()
             
             //Вычисление нужного элемента в likedFilmsArray на основании id
-            let element = model.likedFilmsArray.first(where: {$0.id == receivedIndex})
+            let element = model.likedFilmObjects?.first(where: {$0.id == receivedIndex})
             
-            navigationItem.title = element?.testTitle ?? "w"
-            posterImageView.image = UIImage(named: element?.testPic ?? "image1")
-            ratingLabel.text = String(element?.testRating ?? 0.0)
-            releaseYearLabel.text = String(element?.testYear ?? 0000)
+            navigationItem.title = element?.filmTitle ?? "w"
+            posterImageView.image = UIImage(named: element?.filmPic ?? "image1")
+            ratingLabel.text = String(element?.filmRating ?? 0.0)
+            releaseYearLabel.text = String(element?.releaseYear ?? 0000)
             
             // Проверка для закрашивания сердечка
-            if element?.isLiked == true {
+            if element?.isLikedByUser == true {
                 addToFavBtn.alpha = 1
                 addToFavBtn.tintColor = .black
             } else {
@@ -160,13 +172,13 @@ class DetailFilmViewController: UIViewController {
                 addToFavBtn.tintColor = .gray
             }
         } else {
-            let element = model.testArray[receivedIndex]
-            navigationItem.title = element.testTitle ?? "TEST"
-            posterImageView.image = UIImage(named: element.testPic ?? "image1")
-            ratingLabel.text = String(element.testRating ?? 0.0)
-            releaseYearLabel.text = String(element.testYear ?? 0000)
+            let element = model.filmObjects?[receivedIndex]
+            navigationItem.title = element?.filmTitle ?? "TEST"
+            posterImageView.image = UIImage(named: element?.filmPic ?? "image1")
+            ratingLabel.text = String(element?.filmRating ?? 0.0)
+            releaseYearLabel.text = String(element?.releaseYear ?? 0000)
 
-            if model.testArray[receivedIndex].isLiked == true {
+            if model.filmObjects?[receivedIndex].isLikedByUser == true {
                 addToFavBtn.alpha = 1
                 addToFavBtn.tintColor = .black
             } else {
@@ -295,7 +307,7 @@ extension DetailFilmViewController: UICollectionViewDataSource, UICollectionView
                                                             for: indexPath) as? FilmPicsCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.posterPreviewImageView.image = UIImage(named: model.testArray[indexPath.item].testPic ?? "image1")
+        cell.posterPreviewImageView.image = UIImage(named: model.filmObjects?[indexPath.item].filmPic ?? "image1")
         return cell
     }
     
@@ -309,7 +321,7 @@ extension DetailFilmViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let destVC = FullPicsViewController()
-        destVC.receivedIndex = model.testArray[indexPath.row].id ?? 0
+        destVC.receivedIndex = model.filmObjects?[indexPath.row].id ?? 0
 //        navigationController?.pushViewController(destVC, animated: true)
         self.present(destVC, animated: true, completion: nil)
     }

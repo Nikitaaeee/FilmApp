@@ -26,7 +26,7 @@ class PosterFullViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(fullPosterImageView)
         adjustConstraintsPoster()
-        fullPosterImageView.image = UIImage(named: Model().testArray[detailIndexPath].testPic ?? "image1")
+        fullPosterImageView.image = UIImage(named: Model().filmObjects?[detailIndexPath].filmPic ?? "image1")
  
     }
     

@@ -89,8 +89,8 @@
             filePath = "Controller/MainViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "MainViewController"
             landmarkType = "21">
          </BreakpointContent>

@@ -17,10 +17,13 @@ class FavoriteFilmViewController: UIViewController {
         super.viewDidLoad()
         
         model.showLikedFilms()
-        print(model.likedFilmsArray)
 
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Favorite Films"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.triangle.2.circlepath.circle.fill"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(updateCV))
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -43,22 +46,29 @@ class FavoriteFilmViewController: UIViewController {
         
         
     }
+    
+    @objc func updateCV() {
+        collectionView?.reloadData()
+    }
+    
 }
 extension FavoriteFilmViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return model.likedFilmsArray.count
+        return model.likedFilmObjects?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FavoriteFilmCollectionViewCell.identifier,
-                                                            for: indexPath) as? FavoriteFilmCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        cell.data = self.model.likedFilmsArray[indexPath.item]
+                                                            for: indexPath) as? FavoriteFilmCollectionViewCell,
+              let likedItem = model.likedFilmObjects?[indexPath.item]  else {
+                  return UICollectionViewCell()
+              }
+        
+        cell.data = likedItem
         return cell
     }
     
@@ -74,7 +84,7 @@ extension FavoriteFilmViewController: UICollectionViewDataSource, UICollectionVi
                         didSelectItemAt indexPath: IndexPath) {
         
         let destVC = DetailFilmViewController()
-        destVC.receivedIndex = model.likedFilmsArray[indexPath.row].id ?? 0
+        destVC.receivedIndex = model.likedFilmObjects?[indexPath.row].id ?? 0
         destVC.cameFromFav = true
         navigationController?.pushViewController(destVC, animated: true)
         

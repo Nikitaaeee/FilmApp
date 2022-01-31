@@ -25,6 +25,7 @@ class FullPicsViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.addTarget(self, action: #selector(closeVC), for: .touchUpInside)
+        button.tintColor = .black
         return button
     } ()
             
@@ -35,8 +36,8 @@ class FullPicsViewController: UIViewController {
         
         view.backgroundColor = .white
         
-        let element = model.testArray[receivedIndex]
-        posterImageView.image = UIImage(named: element.testPic ?? "image1")
+        let element = model.filmObjects?[receivedIndex]
+        posterImageView.image = UIImage(named: element?.filmPic ?? "image1")
         
         view.addSubview(posterImageView)
         view.addSubview(closeBtn)

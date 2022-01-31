@@ -10,6 +10,7 @@ import UIKit
 class FavoriteFilmCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "FavFilmCell"
+    let model = Model()
     
     var posterPreviewImageView: UIImageView = {
         let imageView = UIImageView()
@@ -46,8 +47,23 @@ class FavoriteFilmCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
         button.setImage(UIImage(systemName: "xmark.bin.circle"), for: .normal)
         button.imageView?.tintColor = .red
+        button.addTarget(self, action: #selector(deleteFromFavBtnPressed), for: .touchUpInside)
+
         return button
     } ()
+    
+    @objc func deleteFromFavBtnPressed(_ sender: UIButton) {
+        guard let likedData = data else {
+            return
+        }
+        model.updateLike(at: likedData.id)
+        
+        if alpha == 0.55 {
+            alpha = 1
+        } else if alpha == 1 {
+            alpha = 0.55
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -89,15 +105,15 @@ class FavoriteFilmCollectionViewCell: UICollectionViewCell {
         
     }
 
-    var data: Item? {
+    var data: FilmObject? {
         didSet {
             guard data != nil else {
                 return
             }
-            posterPreviewImageView.image = UIImage(named: data?.testPic ?? "image1")
-            filmTitleLabel.text = data?.testTitle
-            releaseYearLabel.text = String(data?.testYear ?? 0)
-            ratingLabel.text = String(data?.testRating ?? 0)
+            posterPreviewImageView.image = UIImage(named: data?.filmPic ?? "image1")
+            filmTitleLabel.text = data?.filmTitle
+            releaseYearLabel.text = String(data?.releaseYear ?? 0)
+            ratingLabel.text = String(data?.filmRating ?? 0)
         }
     }
 }

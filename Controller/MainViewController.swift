@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class MainViewController: UIViewController, UISearchBarDelegate {
 
@@ -20,16 +21,28 @@ class MainViewController: UIViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        model.newTestArray = model.testArray
+        model.arrayHelper = model.filmObjects
         
-//        print(model.testArray)
-        print(model.likedFilmsArray)
+        //MARK: - Блок для принта с адресом файла Realm
+//        let realm = try? Realm()
+//        let filmObject = FilmObject()
+//        do{
+//            try realm?.write({
+//                realm?.add(filmObject)
+//            })
+//        }catch{
+//            print("\(error.localizedDescription)")
+//        }
+//        print(realm?.configuration.fileURL)
+//        model.ratingSort()
+        
 
-        // Search Bar
+
+        //MARK: - Search Bar
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Find Your Film"
         
-        // Navigation Controller
+        //MARK: -  Navigation Controller
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "All Films"
         navigationItem.searchController = searchController
@@ -45,13 +58,13 @@ class MainViewController: UIViewController, UISearchBarDelegate {
                                                             target: self,
                                                             action: #selector(sortRating))
                 
-        // Layout
+        //MARK: -  Layout
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 1
         layout.minimumInteritemSpacing = 1
         
-        // Collection View
+        //MARK: -  Collection View
         collectionView = UICollectionView(frame: .zero,
                                           collectionViewLayout: layout)
         
@@ -65,12 +78,11 @@ class MainViewController: UIViewController, UISearchBarDelegate {
         view.addSubview(collectionView)
         collectionView.frame = view.bounds
 //        print(collectionView.bounds.height)
-        model.ratingSort()
-   
         collectionView.reloadData()
         
         
     }
+    //MARK: - Методы
     
     @objc func goToFav() {
         let destVC = FavoriteFilmViewController()
@@ -87,14 +99,25 @@ class MainViewController: UIViewController, UISearchBarDelegate {
         collectionView!.reloadData()
     }
     
-    
-        // Методы Search Bar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        model.arrayHelper = model.filmObjects
         model.search(searchTextValue: searchText)
+        
+        if searchBar.text?.count == 0 {
+            model.arrayHelper = model.filmObjects
+            model.ratingSort()
+        }
         collectionView?.reloadData()
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        model.newTestArray = model.testArray
+        model.arrayHelper = model.filmObjects
+        
+        if searchBar.text?.count == 0 {
+            model.arrayHelper = model.filmObjects
+            model.ratingSort()
+        }
+        
+        model.ratingSort()
         collectionView?.reloadData()
     }
 }
@@ -104,27 +127,24 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         
-        return model.newTestArray.count
+        return model.arrayHelper?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilmCollectionViewCell.identifier,
-                                                            for: indexPath) as? FilmCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        cell.data = self.model.newTestArray[indexPath.item]
+                                                            for: indexPath) as? FilmCollectionViewCell,
+              let item = model.arrayHelper?[indexPath.row]  else {
+                  return UICollectionViewCell()
+              }
+        cell.data = item
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        
-//        return CGSize(width: ((view.frame.size.width)/2-1),
-//                      height: ((view.frame.size.height)/3))
         
         return CGSize(width: (collectionView.bounds.width/2)-4,
                       height: 270)
@@ -134,7 +154,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
                         didSelectItemAt indexPath: IndexPath) {
         
         let destVC = DetailFilmViewController()
-        destVC.receivedIndex = model.newTestArray[indexPath.row].id ?? 0
+        destVC.receivedIndex = model.arrayHelper?[indexPath.row].id ?? 0
         destVC.cameFromFav = false
         navigationController?.pushViewController(destVC, animated: true)
     }
